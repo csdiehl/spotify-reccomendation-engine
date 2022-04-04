@@ -1,13 +1,19 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import SongForm from "./SongForm";
+import AuthContext from "../store/auth-context";
 
 const Welcome = () => {
   const [response, setResponse] = useState([]);
-
+  const ctx = useContext(AuthContext);
   const location = useLocation();
-  const params = new URLSearchParams(location.hash);
-  const token = params.get("#access_token");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.hash);
+    const token = params.get("#access_token");
+
+    ctx.login(token);
+  }, [ctx, location.hash]);
 
   const sendRequest = (choices) => {
     const { genres, danceability: dance, acousticness: acoustic } = choices;
@@ -19,7 +25,7 @@ const Welcome = () => {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${ctx.token}`,
           "Content-Type": "application/json",
         },
       }
@@ -49,6 +55,8 @@ const Welcome = () => {
       <h1>Welcome!</h1>
       <div>
         <SongForm callback={sendRequest} />
+      </div>
+      <div>
         {response.length > 0 && songList}
       </div>
     </div>
