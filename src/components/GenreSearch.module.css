@@ -10,4 +10,5 @@ li:hover {
 
 .list-container {
     overflow-y: scroll;
+    max-height: 300px;
 }

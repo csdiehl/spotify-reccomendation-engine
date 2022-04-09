@@ -5,7 +5,7 @@ import GenreSearch from "./GenreSearch";
 
 const SongForm = (props) => {
   const [choices, setChoices] = useState({
-    genres: [],
+    genres: ['country', 'classical', 'rock'],
     acousticness: 0.5,
     danceability: 0.5,
   });
@@ -49,6 +49,7 @@ const SongForm = (props) => {
 
   return (
     <div>
+      <GenreSearch />
       <h2>Genres</h2>
       <GenreButton
         name="country"

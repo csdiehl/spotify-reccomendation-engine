@@ -9,6 +9,10 @@ const GenreSearch = () => {
     const inputRef = useRef();
 
     useEffect(() => {
+        if (!ctx.token) {
+            return;
+        }
+
         fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
           method: "GET",
           headers: {
@@ -20,7 +24,7 @@ const GenreSearch = () => {
           .then((data) => {
             setGenres(data.genres)
           });
-      }, [ctx]);
+      }, [ctx.token]);
 
       const changeHandler = () => {
         console.log(inputRef.current.value)
