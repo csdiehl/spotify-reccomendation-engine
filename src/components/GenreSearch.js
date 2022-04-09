@@ -4,7 +4,8 @@ import classes from './GenreSearch.module.css';
 
 const GenreSearch = () => {
     const ctx = useContext(AuthContext);
-    const [genres, setGenres] = useState(['classical']);
+    const [genres, setGenres] = useState([]);
+    const [filteredGenres, setFilteredGenres] = useState([])
 
     const inputRef = useRef();
 
@@ -23,18 +24,22 @@ const GenreSearch = () => {
           .then((response) => response.json())
           .then((data) => {
             setGenres(data.genres)
+            setFilteredGenres(data.genres)
           });
       }, [ctx.token]);
 
       const changeHandler = () => {
-        console.log(inputRef.current.value)
+        const text = inputRef.current.value.toLowerCase()
+        const newGenres = genres.filter(item => item.toLowerCase().includes(text) )
+
+        setFilteredGenres(newGenres);
       }
 
     return <div>
         <input type = 'text' ref = {inputRef} onChange = {changeHandler} />
         <div className = {classes['list-container']}>
         <ul>
-            {genres.map(item => { return <li key = {item}>{item}</li>}) }
+            {filteredGenres.map(item => { return <li key = {item}>{item}</li>}) }
         </ul>
         </div>
     </div>
