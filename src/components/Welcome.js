@@ -26,7 +26,6 @@ const Welcome = () => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${ctx.token}`,
-          "Content-Type": "application/json",
         },
       }
     )

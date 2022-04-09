@@ -1,10 +1,11 @@
 import { useState } from "react";
 import "./SongForm.css";
 import GenreButton from "./GenreButton";
+import GenreSearch from "./GenreSearch";
 
 const SongForm = (props) => {
   const [choices, setChoices] = useState({
-    genres: ["country", "rock"],
+    genres: [],
     acousticness: 0.5,
     danceability: 0.5,
   });
@@ -47,20 +48,35 @@ const SongForm = (props) => {
   };
 
   return (
-  <div>
-    <h2>Genres</h2>
-    <GenreButton name = 'country' changeHandler = {changeHandler} clicked = {choices.genres.includes('country')} />
-    <GenreButton name = 'classical' changeHandler = {changeHandler} clicked = {choices.genres.includes('classical')} />
-    <GenreButton name = 'rock' changeHandler = {changeHandler} clicked = {choices.genres.includes('rock')} />
-    
-    <h2>Musical Quality</h2>
-    <label>Acoustic</label>
-    <input onChange={musicChangeHandler} type="checkbox" value="acoustic" />
-    <label>Danceable</label>
-    <input onChange={musicChangeHandler} type="checkbox" value="danceable" />
+    <div>
+      <h2>Genres</h2>
+      <GenreButton
+        name="country"
+        changeHandler={changeHandler}
+        clicked={choices.genres.includes("country")}
+      />
+      <GenreButton
+        name="classical"
+        changeHandler={changeHandler}
+        clicked={choices.genres.includes("classical")}
+      />
+      <GenreButton
+        name="rock"
+        changeHandler={changeHandler}
+        clicked={choices.genres.includes("rock")}
+      />
 
-    <button onClick = {submitHandler} type="submit">Get Recomendations</button>
-  </div>)
+      <h2>Musical Quality</h2>
+      <label>Acoustic</label>
+      <input onChange={musicChangeHandler} type="checkbox" value="acoustic" />
+      <label>Danceable</label>
+      <input onChange={musicChangeHandler} type="checkbox" value="danceable" />
+
+      <button onClick={submitHandler} type="submit">
+        Get Recomendations
+      </button>
+    </div>
+  );
 };
 
 export default SongForm;
