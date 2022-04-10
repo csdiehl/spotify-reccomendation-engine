@@ -1,0 +1,36 @@
+.button {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: lightgrey;
+    border: none;
+}
+
+.clicked {
+    background-color: steelblue;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.btn-container {
+    background-color: lightgrey;
+    border-radius: 10px;
+   
+}
+
+.main-container{
+    max-width: 200px;
+
+}
+
+.btn-label {
+    cursor: pointer;
+    color: lightgrey
+}
+
+.btn-label:hover {
+    color: darkgray;
+}
+
+.label-clicked {
+    font-weight: bold;
+}

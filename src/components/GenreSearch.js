@@ -72,6 +72,7 @@ const GenreSearch = (props) => {
     <div>
       <input
         className={classes["search-bar"]}
+        placeholder = "Search for a Genre..."
         type="text"
         ref={inputRef}
         onChange={changeHandler}
