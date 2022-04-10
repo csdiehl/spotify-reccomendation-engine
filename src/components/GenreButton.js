@@ -1,4 +1,4 @@
-import './SongForm.css'
+import './GenreButton.css'
 
 const GenreButton = (props) => {
     return <button
@@ -8,6 +8,7 @@ const GenreButton = (props) => {
     onClick={props.changeHandler}
     value={props.name}
     name={props.name}
+    disabled = {props.disabled && !props.clicked}
   >
     {props.name}
   </button>

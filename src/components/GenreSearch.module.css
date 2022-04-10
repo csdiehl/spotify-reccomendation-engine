@@ -10,5 +10,14 @@ li:hover {
 
 .list-container {
     overflow-y: scroll;
-    max-height: 300px;
+    max-height: 400px;
+}
+
+.search-bar {
+    width: 200px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1px solid #a6a6a6;
+    padding: 10px;
+
 }

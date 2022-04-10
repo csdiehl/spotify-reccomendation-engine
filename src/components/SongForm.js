@@ -1,32 +1,19 @@
-import { useState } from "react";
-import "./SongForm.css";
-import GenreButton from "./GenreButton";
+import { useState, useContext } from "react";
 import GenreSearch from "./GenreSearch";
+import AuthContext from "../store/auth-context";
+import SongList from "./SongList";
+
 
 const SongForm = (props) => {
   const [choices, setChoices] = useState({
-    genres: ['country', 'classical', 'rock'],
+    genres: [],
     acousticness: 0.5,
     danceability: 0.5,
   });
 
-  const changeHandler = (event) => {
-    let arrayCopy = [...choices.genres];
-    const name = event.target.name;
+  const [recs, setRecs] = useState([]);
 
-    if (arrayCopy.includes(name) === false) {
-      //add to array
-      arrayCopy.push(name);
-    } else {
-      //remove from array
-      const index = arrayCopy.indexOf(name);
-      arrayCopy.splice(index, 1);
-    }
-
-    setChoices((prevState) => {
-      return { ...prevState, genres: arrayCopy };
-    });
-  };
+  const ctx = useContext(AuthContext);
 
   const musicChangeHandler = (event) => {
     event.preventDefault();
@@ -42,40 +29,54 @@ const SongForm = (props) => {
     });
   };
 
-  const submitHandler = (event) => {
+  const updateGenres = (chosenGenres) => {
+    setChoices(prevState => { return {...prevState, genres: chosenGenres} })
+  }
+
+  const sendRequest = (event) => {
     event.preventDefault();
-    props.callback(choices);
+
+    const {genres, danceability: dance, acousticness: acoustic} = choices
+    const seedGenres = genres.toString();
+    const limit = 10;
+
+    fetch(
+      `https://api.spotify.com/v1/recommendations?seed_genres=${seedGenres}&limit=${limit}&min_danceability=${dance}&min_acousticness=${acoustic}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${ctx.token}`,
+          "Content-Type": "application/json"
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const cleanData = data.tracks.map((obj) => {
+          return {
+            artist: obj.name,
+          };
+        });
+
+        setRecs(cleanData);
+      });
   };
 
   return (
     <div>
-      <GenreSearch />
-      <h2>Genres</h2>
-      <GenreButton
-        name="country"
-        changeHandler={changeHandler}
-        clicked={choices.genres.includes("country")}
-      />
-      <GenreButton
-        name="classical"
-        changeHandler={changeHandler}
-        clicked={choices.genres.includes("classical")}
-      />
-      <GenreButton
-        name="rock"
-        changeHandler={changeHandler}
-        clicked={choices.genres.includes("rock")}
-      />
-
+      <GenreSearch updateGenres = {updateGenres} selectedGenres = {choices.genres} />
       <h2>Musical Quality</h2>
       <label>Acoustic</label>
       <input onChange={musicChangeHandler} type="checkbox" value="acoustic" />
       <label>Danceable</label>
       <input onChange={musicChangeHandler} type="checkbox" value="danceable" />
-
-      <button onClick={submitHandler} type="submit">
+      <div>
+      <p>{choices.genres}</p>
+      <button onClick={sendRequest} type="submit">
         Get Recomendations
       </button>
+      </div>
+      {recs.length > 0 && <SongList reccomendations = {recs} />}
     </div>
   );
 };
