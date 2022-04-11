@@ -3,7 +3,6 @@ import { useState } from "react";
 
 const ButtonGroup = (props) => {
   const [clicked, setClicked] = useState("medium");
-  const [showButtons, setShowButtons] = useState(false)
 
   const clickHandler = (event) => {
     event.preventDefault();
@@ -24,13 +23,17 @@ const ButtonGroup = (props) => {
     </button>
   ))
 
+  const showBtnHandler = (setting) => {
+    props.showBtn(setting)
+  }
+
   return (
     <div className= {classes['main-container']}>
       <div>
-        <p className = {showButtons ? classes['label-clicked'] : classes['btn-label'] } onClick = {() => setShowButtons(prevState => !prevState)}>{props.setting}</p>
+        <p className = {props.enabled ? classes['label-clicked'] : classes['btn-label'] } onClick = {() => showBtnHandler(props.setting) }>{props.setting}</p>
       </div>
       <div className = {classes['btn-container']}>
-        {showButtons && buttonSet}
+        {props.enabled && buttonSet}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, Fragment } from "react";
 import GenreSearch from "./GenreSearch";
 import AuthContext from "../store/auth-context";
 import SongList from "./SongList";
@@ -16,12 +16,19 @@ const SongForm = (props) => {
     energy: 0.5,
     speechiness: 0.5,
     liveness: 0.5,
+    tempo: 100,
+    duration: 120000,
   });
+
+  const [enabledOptions, setEnabledOptions] = useState([
+    "acousticness",
+    "danceability",
+    "liveness",
+  ]);
 
   //acoustic, danceable, long, instrumental, energy, live, loudness, popularity, tempo, speechiness
   //max, min, target
   //add duration and tempo later
-
   const [recs, setRecs] = useState([]);
 
   const musicChangeHandler = (setting, value) => {
@@ -55,6 +62,7 @@ const SongForm = (props) => {
       acousticness: acoustic,
       liveness: live,
       energy,
+      instrumentalness: instrument,
     } = choices;
     const seedGenres = genres.toString();
     const limit = 10;
@@ -65,10 +73,11 @@ const SongForm = (props) => {
         new URLSearchParams({
           seed_genres: seedGenres,
           limit: limit,
-          target_danceability: dance,
-          target_acousticness: acoustic,
-          target_energy: energy,
-          target_liveness: live
+          ...(enabledOptions.includes('danceability') && {target_danceability: dance} ),
+          ...(enabledOptions.includes('acousticness') && {target_acousticness: acoustic} ),
+          ...(enabledOptions.includes('energy') && {target_energy: energy} ),
+          ...(enabledOptions.includes('liveness') && {target_liveness: live} ),
+          ...(enabledOptions.includes('instrumentalness') && {target_instrumentalness: instrument} )
         }),
       {
         method: "GET",
@@ -81,8 +90,12 @@ const SongForm = (props) => {
       .then((res) => res.json())
       .then((data) => {
         const cleanData = data.tracks.map((obj) => {
+
+          const artists = obj.artists.map(obj => obj.name)
+
           return {
-            artist: obj.name,
+            songName: obj.name,
+            artistNames: artists
           };
         });
 
@@ -90,15 +103,35 @@ const SongForm = (props) => {
       });
   };
 
+  const showBtn = (setting) => {
+    const arrayCopy = [...enabledOptions]
+
+    if (enabledOptions.includes(setting)) {
+      const index = arrayCopy.indexOf(setting)
+      arrayCopy.splice(index, 1)
+    } else {
+      arrayCopy.push(setting)
+    }
+
+    setEnabledOptions(arrayCopy)
+  }
+
   const sliders = Object.keys(choices)
     .filter((key) => key !== "genres")
     .map((key) => {
       return (
-        <ButtonGroup key={key} setting={key} setValue={musicChangeHandler} />
+        <ButtonGroup
+          key={key}
+          setting={key}
+          setValue={musicChangeHandler}
+          enabled={enabledOptions.includes(key)}
+          showBtn = {showBtn}
+        />
       );
     });
 
   return (
+    <Fragment>
     <div className="form-container">
       <GenreSearch
         updateGenres={updateGenres}
@@ -116,8 +149,11 @@ const SongForm = (props) => {
           Get Recomendations
         </button>
       </div>
+      </div>
+      <div>
       {recs.length > 0 && <SongList reccomendations={recs} />}
-    </div>
+      </div>
+    </Fragment>
   );
 };
 

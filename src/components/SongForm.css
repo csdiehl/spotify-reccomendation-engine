@@ -20,5 +20,6 @@
 
 .form-container {
     margin: 20px;
-    margin-bottom: 50px
+    margin-bottom: 50px;
+    width: 50%;
 }

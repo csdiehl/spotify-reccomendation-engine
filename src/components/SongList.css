@@ -1,0 +1,18 @@
+.song {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.song-name {
+    text-align: left;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.artist-names {
+    text-align: right;
+    font-weight: 300;
+    font-size: 16px;
+}
