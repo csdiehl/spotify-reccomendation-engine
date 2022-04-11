@@ -6,9 +6,12 @@ const SongList = (props) => {
     <Fragment>
       {props.reccomendations.map((obj) => {
         return (
-          <div className="song">
-            <h2 className = 'song-name' key={obj.songName}>{obj.songName}</h2>
+          <div key={obj.songName} className="song">
+            <h2 className = 'song-name'>{obj.songName}</h2>
+            <div>
             <h3 className = 'artist-names'>{obj.artistNames}</h3>
+            <a target = "_blank" rel = "noreferrer" href = {obj.spotifyURL} className = "play-btn">Play in Spotify</a>
+            </div>
           </div>
         );
       })}

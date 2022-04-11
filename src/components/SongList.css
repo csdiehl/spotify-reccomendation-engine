@@ -16,3 +16,13 @@
     font-weight: 300;
     font-size: 16px;
 }
+
+.play-btn {
+    border-radius: 15px;
+    border: none;
+    background-color: steelblue;
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: 600;
+}

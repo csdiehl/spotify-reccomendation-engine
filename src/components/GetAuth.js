@@ -1,3 +1,5 @@
+import classes from './GetAuth.module.css'
+
 const GetAuth = () => {
 
   var url = "https://accounts.spotify.com/authorize";
@@ -10,8 +12,9 @@ const GetAuth = () => {
   };
 
   return (
-    <div>
-      <button onClick={getAuth}>Authenticate User</button>
+    <div className = {classes.container}>
+      <h1>Welcome</h1>
+      <button className = {classes.button} onClick={getAuth}>Login With Spotify</button>
     </div>
   );
 };

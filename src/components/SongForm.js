@@ -26,6 +26,8 @@ const SongForm = (props) => {
     "liveness",
   ]);
 
+  const [loading, setLoading] = useState(false)
+
   //acoustic, danceable, long, instrumental, energy, live, loudness, popularity, tempo, speechiness
   //max, min, target
   //add duration and tempo later
@@ -55,6 +57,7 @@ const SongForm = (props) => {
 
   const sendRequest = (event) => {
     event.preventDefault();
+    setLoading(true)
 
     const {
       genres,
@@ -95,11 +98,13 @@ const SongForm = (props) => {
 
           return {
             songName: obj.name,
-            artistNames: artists
+            artistNames: artists,
+            spotifyURL: obj.external_urls.spotify
           };
         });
 
         setRecs(cleanData);
+        setLoading(false)
       });
   };
 
@@ -133,6 +138,7 @@ const SongForm = (props) => {
   return (
     <Fragment>
     <div className="form-container">
+      <h2>Choose a Genre</h2>
       <GenreSearch
         updateGenres={updateGenres}
         selectedGenres={choices.genres}
@@ -150,8 +156,10 @@ const SongForm = (props) => {
         </button>
       </div>
       </div>
-      <div>
-      {recs.length > 0 && <SongList reccomendations={recs} />}
+      <div className = 'songs-container'>
+      {recs.length > 0 && !loading && <SongList reccomendations={recs} />} 
+      {loading && <p className = "message">Loading Tracks...</p>}
+      {recs.length === 0 && !loading && <p className = "message">Add Genres to get Reccomendations</p>}
       </div>
     </Fragment>
   );
