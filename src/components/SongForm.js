@@ -26,7 +26,9 @@ const SongForm = (props) => {
     "liveness",
   ]);
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const [visibleForm, setVisibleForm] = useState("genre search");
 
   //acoustic, danceable, long, instrumental, energy, live, loudness, popularity, tempo, speechiness
   //max, min, target
@@ -57,7 +59,7 @@ const SongForm = (props) => {
 
   const sendRequest = (event) => {
     event.preventDefault();
-    setLoading(true)
+    setLoading(true);
 
     const {
       genres,
@@ -76,11 +78,17 @@ const SongForm = (props) => {
         new URLSearchParams({
           seed_genres: seedGenres,
           limit: limit,
-          ...(enabledOptions.includes('danceability') && {target_danceability: dance} ),
-          ...(enabledOptions.includes('acousticness') && {target_acousticness: acoustic} ),
-          ...(enabledOptions.includes('energy') && {target_energy: energy} ),
-          ...(enabledOptions.includes('liveness') && {target_liveness: live} ),
-          ...(enabledOptions.includes('instrumentalness') && {target_instrumentalness: instrument} )
+          ...(enabledOptions.includes("danceability") && {
+            target_danceability: dance,
+          }),
+          ...(enabledOptions.includes("acousticness") && {
+            target_acousticness: acoustic,
+          }),
+          ...(enabledOptions.includes("energy") && { target_energy: energy }),
+          ...(enabledOptions.includes("liveness") && { target_liveness: live }),
+          ...(enabledOptions.includes("instrumentalness") && {
+            target_instrumentalness: instrument,
+          }),
         }),
       {
         method: "GET",
@@ -93,33 +101,32 @@ const SongForm = (props) => {
       .then((res) => res.json())
       .then((data) => {
         const cleanData = data.tracks.map((obj) => {
-
-          const artists = obj.artists.map(obj => obj.name)
+          const artists = obj.artists.map((obj) => obj.name);
 
           return {
             songName: obj.name,
             artistNames: artists,
-            spotifyURL: obj.external_urls.spotify
+            spotifyURL: obj.external_urls.spotify,
           };
         });
 
         setRecs(cleanData);
-        setLoading(false)
+        setLoading(false);
       });
   };
 
   const showBtn = (setting) => {
-    const arrayCopy = [...enabledOptions]
+    const arrayCopy = [...enabledOptions];
 
     if (enabledOptions.includes(setting)) {
-      const index = arrayCopy.indexOf(setting)
-      arrayCopy.splice(index, 1)
+      const index = arrayCopy.indexOf(setting);
+      arrayCopy.splice(index, 1);
     } else {
-      arrayCopy.push(setting)
+      arrayCopy.push(setting);
     }
 
-    setEnabledOptions(arrayCopy)
-  }
+    setEnabledOptions(arrayCopy);
+  };
 
   const sliders = Object.keys(choices)
     .filter((key) => key !== "genres")
@@ -130,36 +137,50 @@ const SongForm = (props) => {
           setting={key}
           setValue={musicChangeHandler}
           enabled={enabledOptions.includes(key)}
-          showBtn = {showBtn}
+          showBtn={showBtn}
         />
       );
     });
 
   return (
     <Fragment>
-    <div className="form-container">
-      <h2>Choose a Genre</h2>
-      <GenreSearch
-        updateGenres={updateGenres}
-        selectedGenres={choices.genres}
-      />
-      <h2>Musical Quality</h2>
-      <div className="slider-container">{sliders}</div>
-      <div>
-        <button
-          className="rec-button"
-          onClick={sendRequest}
-          type="submit"
-          disabled={choices.genres.length < 1}
-        >
-          Get Recomendations
-        </button>
+      <div className="form-container">
+        {visibleForm === "genre search" && (
+          <Fragment>
+            <h2>Choose a Genre</h2>
+            <GenreSearch
+              updateGenres={updateGenres}
+              selectedGenres={choices.genres}
+            />
+            <button className = "next-button" disabled = {choices.genres.length < 1} onClick={() => setVisibleForm("musical quality")}>
+              Choose Musical Qualities...
+            </button>
+          </Fragment>
+        )}
+        {visibleForm === "musical quality" && (
+          <Fragment>
+            <h2>Musical Quality</h2>
+            <button className = "next-button" onClick = {() => setVisibleForm('genre search')}>Back</button>
+            <div className="slider-container">{sliders}</div>
+          </Fragment>
+        )}
+        <div>
+          <button
+            className="rec-button"
+            onClick={sendRequest}
+            type="submit"
+            disabled={choices.genres.length < 1}
+          >
+            Get Recomendations
+          </button>
+        </div>
       </div>
-      </div>
-      <div className = 'songs-container'>
-      {recs.length > 0 && !loading && <SongList reccomendations={recs} />} 
-      {loading && <p className = "message">Loading Tracks...</p>}
-      {recs.length === 0 && !loading && <p className = "message">Add Genres to get Reccomendations</p>}
+      <div className="songs-container">
+        {recs.length > 0 && !loading && <SongList reccomendations={recs} />}
+        {loading && <div className="loader"></div>}
+        {recs.length === 0 && !loading && (
+          <p className="message">Add Genres to get Reccomendations</p>
+        )}
       </div>
     </Fragment>
   );

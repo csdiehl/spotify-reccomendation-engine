@@ -17,7 +17,7 @@ const Welcome = () => {
 
   return (
     <div>
-      <h1>Welcome!</h1>
+      <h1>Get Reccomendations</h1>
       <div className = "main-page-container">
         <SongForm />
       </div>

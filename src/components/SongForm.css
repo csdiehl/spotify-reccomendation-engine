@@ -1,17 +1,24 @@
 .slider-container {
     margin: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .rec-button {
     padding: 10px;
-    background-color: steelblue;
+    background-color: #FF9B85;
     color: #FFF;
     border-radius: 20px;
     border: none;
+    margin: 15px;
+    font-weight: 500;
+    font-size: 24px;
+    width: 300px;
 
+}
+
+.rec-button:hover {
+    font-weight: 600;
 }
 
 .rec-button:disabled {
@@ -22,7 +29,7 @@
     margin: 20px;
     margin-bottom: 50px;
     width: 50%;
-    box-shadow: 5px 0px 3px grey;
+    background-color: rgba(255, 255, 255, .05);
 }
 
 .message {
@@ -35,5 +42,33 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin:auto
+    width: 60%;
+    margin: 20px;
 }
+
+.next-button {
+    color: #FFF;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, .05);
+    border: 1px solid grey;
+    border-radius: 20px;
+
+}
+
+.next-button:disabled {
+    color: #a6a6a6;
+}
+
+.loader {
+    border: 10px solid #FFF; /* Light grey */
+    border-top: 10px solid #AAF683; /* Blue */
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

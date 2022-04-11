@@ -32,9 +32,7 @@ const ButtonGroup = (props) => {
       <div>
         <p className = {props.enabled ? classes['label-clicked'] : classes['btn-label'] } onClick = {() => showBtnHandler(props.setting) }>{props.setting}</p>
       </div>
-      <div className = {classes['btn-container']}>
         {props.enabled && buttonSet}
-      </div>
     </div>
   );
 };
