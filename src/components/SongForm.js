@@ -27,13 +27,13 @@ const SongForm = (props) => {
   ]);
 
   const [loading, setLoading] = useState(false);
-
   const [visibleForm, setVisibleForm] = useState("genre search");
 
   //acoustic, danceable, long, instrumental, energy, live, loudness, popularity, tempo, speechiness
   //max, min, target
   //add duration and tempo later
   const [recs, setRecs] = useState([]);
+  const [features, setFeatures] = useState([])
 
   const musicChangeHandler = (setting, value) => {
     let number;
@@ -98,7 +98,7 @@ const SongForm = (props) => {
         },
       }
     )
-      .then((res) => res.json())
+      .then((res) => {if (res.ok) {return res.json()} else {alert('request failed!') } } )
       .then((data) => {
         const cleanData = data.tracks.map((obj) => {
           const artists = obj.artists.map((obj) => obj.name);
@@ -110,9 +110,32 @@ const SongForm = (props) => {
           };
         });
 
-        setRecs(cleanData);
-        setLoading(false);
-      });
+        setRecs(cleanData)
+
+        const trackIds = data.tracks.map(track => track.id)
+        return fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(",")}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${ctx.token}`,
+            "Content-Type": "application/json",
+          }
+        })
+
+ 
+      }).then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          alert("failed API call!")
+        }
+      }
+      ).then((data) => {
+
+        setFeatures(data.audio_features)
+        setLoading(false)
+      }
+      ).catch((error) => alert("Error. Trying logging in again.")
+      );
   };
 
   const showBtn = (setting) => {
@@ -176,7 +199,7 @@ const SongForm = (props) => {
         </div>
       </div>
       <div className="songs-container">
-        {recs.length > 0 && !loading && <SongList reccomendations={recs} />}
+        {recs.length > 0 && !loading && <SongList reccomendations={recs} features = {features} />}
         {loading && <div className="loader"></div>}
         {recs.length === 0 && !loading && (
           <p className="message">Add Genres to get Reccomendations</p>

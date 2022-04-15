@@ -1,0 +1,13 @@
+ul {
+    list-style-type: none;
+    font-size: 16px;
+   
+}
+
+li:hover {
+    font-weight: bold;
+}
+
+.list-container {
+    overflow-y: scroll;
+}

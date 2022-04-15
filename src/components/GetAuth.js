@@ -13,8 +13,10 @@ const GetAuth = () => {
 
   return (
     <div className = {classes.container}>
-      <h1>Welcome</h1>
+      <h1>Music Reccomendations</h1>
+      <p>Login using your spotify account</p>
       <button className = {classes.button} onClick={getAuth}>Login With Spotify</button>
+      <p>Powered by the Spotify Web API</p>
     </div>
   );
 };
