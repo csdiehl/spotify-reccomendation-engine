@@ -3,7 +3,9 @@
 This project uses data from the Spotify Web API to find songs that match user preferences and display these in an engaging and responsive dashboard using React.js. Users can sort the results based on musical qualities, and click a button to listen to the song in Spotify. 
 
 Project Link (you need a Spotify account and may need to be added to the approved list of users in development mode to view):
+https://csdiehl.github.io/spotify-reccomendation-engine/
 
+https://user-images.githubusercontent.com/59377951/170523674-093a1692-3770-44bd-b5c8-34ff0826a481.mp4
 
 ## Authentication
 
